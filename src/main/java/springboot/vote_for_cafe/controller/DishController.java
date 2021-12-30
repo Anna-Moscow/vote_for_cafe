@@ -11,6 +11,7 @@ import springboot.vote_for_cafe.model.Cafe;
 import springboot.vote_for_cafe.model.Dish;
 import springboot.vote_for_cafe.repositiry.CafeRepository;
 import springboot.vote_for_cafe.repositiry.DishRepository;
+import springboot.vote_for_cafe.service.DishService;
 
 import java.net.URI;
 import java.util.List;
@@ -19,23 +20,28 @@ import java.util.Optional;
 @RestController
 public class DishController {
 
+
+    private DishService service;
+
+
     private DishRepository repository;
 
     @Autowired
-    public DishController(DishRepository repository) {
+    public DishController(DishService service,  DishRepository repository )
+    {
+        this.service = service;
         this.repository = repository;
     }
 
-    @GetMapping("cafe/{cafeId}/dishes") // это правильный url?
-    public List<Dish> getDishes(Model model, @PathVariable int cafeId) {
-        return repository.getAll(cafeId);
+    @GetMapping("cafe/{cafeId}/dishes") // зачем model в параметрах?
+    public List<Dish> getAllDishes( @PathVariable int cafeId) {
+        return service.getAllDishes(cafeId);
 
     }
 
-    @PostMapping(value = "/admin/dishes")
-    public ResponseEntity<Dish> save (@RequestBody Dish dish) {
-        checkNew(dish);// посметреть validationUtil
-        Dish created = repository.saveAndFlush(dish); //как добавить cafe id? непонятно, как это работает в topjava  в случае crudRepository
+    @PostMapping(value = "/admin/cafe/{cafeId}/dishes")
+    public ResponseEntity<Dish> save (@PathVariable int cafeId, @RequestBody Dish dish) {
+         Dish created = service.save(cafeId, dish);
         URI uri = ServletUriComponentsBuilder.fromCurrentContextPath()
                 .path("/dishes" + "/{id}")
                 .buildAndExpand(created.getId()).toUri();
@@ -43,9 +49,9 @@ public class DishController {
         return ResponseEntity.created(uri).body(created);
     }
 
-    @DeleteMapping("/admin/cafe/{cafeId}/dishes/{id}") //должна ли в url быть привязка к кафе и его id?
+    @DeleteMapping("/admin/dishes/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void delete(@PathVariable int id, @PathVariable int cafeId) {
-       repository.delete(id, cafeId);
+    public void delete(@PathVariable int id) {
+        service.delete(id);
     }
 }

@@ -1,10 +1,13 @@
 package springboot.vote_for_cafe.model;
 
+import org.springframework.util.CollectionUtils;
 import springboot.vote_for_cafe.model.Role;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
+import java.util.Collection;
+import java.util.EnumSet;
 import java.util.Set;
 
 @Entity
@@ -18,12 +21,12 @@ public class User {
 
     @Column(name = "name", nullable = false)
     @NotBlank
-    @Size(max = 20)
+    @Size(max = 30)
     public String name;
 
     @Column(name = "surname", nullable = false)
     @NotBlank
-    @Size(max = 30)
+    @Size(max = 40)
     public String surname;
 
     @Enumerated(EnumType.STRING)
@@ -33,7 +36,6 @@ public class User {
     @Column(name = "role")
     @JoinColumn(name = "user_id")
     public Set<Role> roles;
-       // по умолчанию юзер и убрать из конструктора
 
     public String getName() {
         return name;
@@ -70,10 +72,15 @@ public class User {
     public User() {
     }
 
-    public User(@NotBlank @Size(max = 20) String name, @NotBlank @Size(max = 30) String surname) {
+    public User(String name, String surname, Collection<Role> roles) {
         this.name = name;
         this.surname = surname;
-            }
+        setRoles(roles);
+    }
+
+    public void setRoles(Collection<Role> roles) {
+        this.roles = CollectionUtils.isEmpty(roles) ? EnumSet.noneOf(Role.class) : EnumSet.copyOf(roles);
+    }
 
 
 }
