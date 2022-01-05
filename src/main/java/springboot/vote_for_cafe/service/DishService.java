@@ -11,6 +11,7 @@ import springboot.vote_for_cafe.model.Cafe;
 import springboot.vote_for_cafe.model.Dish;
 import springboot.vote_for_cafe.repositiry.CafeRepository;
 import springboot.vote_for_cafe.repositiry.DishRepository;
+import springboot.vote_for_cafe.util.ValidationUtil;
 
 import java.net.URI;
 import java.util.List;
@@ -36,9 +37,9 @@ public class DishService {
 
 
     public Dish save ( int cafeId,  Dish dish)  {
-        Cafe cafe = cafeRepository.findById(cafeId).orElse(null);
+        Cafe cafe = cafeRepository.findById(cafeId).orElse(null); //что делать, если null
         dish.setCafe(cafe);
-        // checkNew(dish); посметреть validationUtil
+        ValidationUtil.checkNew(dish);
         return dishRepository.saveAndFlush(dish);
             }
 

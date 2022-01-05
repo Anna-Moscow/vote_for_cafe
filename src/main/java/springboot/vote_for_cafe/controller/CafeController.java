@@ -13,6 +13,7 @@ import springboot.vote_for_cafe.model.User;
 import springboot.vote_for_cafe.repositiry.CafeRepository;
 import springboot.vote_for_cafe.repositiry.VoteRepository;
 import springboot.vote_for_cafe.service.CafeService;
+import springboot.vote_for_cafe.util.ValidationUtil;
 
 import java.net.URI;
 import java.time.LocalDate;
@@ -27,15 +28,18 @@ public class CafeController {
 
     private CafeService cafeService;
 
+// зачем слово api в url? чтобы было одинаковое начало просто?
 
     @Autowired
     public CafeController(CafeService cafeService) {
         this.cafeService = cafeService;
     }
 
-    @PostMapping(value = "/admin/cafes")
+    @PostMapping(value = "api/admin/cafes")
     // должны ли быть отдельные контроллеры для админа и юзеров?
     public ResponseEntity<Cafe> save(@RequestBody Cafe cafe) {
+        // должна ли проверка быть в контроллере (в Topjava так) или в сервисе?
+        ValidationUtil.checkNew(cafe);
         Cafe created = cafeService.save(cafe);
         URI uri = ServletUriComponentsBuilder.fromCurrentContextPath()
                 .path("/cafes/{id}")
@@ -51,7 +55,7 @@ public class CafeController {
 //    }
 
 
-    @GetMapping("/cafes/votes")
+    @GetMapping("api/cafes/votes")
     public Map<String, Integer> getAllWithVotes() {
 
       return cafeService.getAllWithVotes();

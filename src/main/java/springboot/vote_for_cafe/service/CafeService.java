@@ -17,6 +17,8 @@ import java.net.URI;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 public class CafeService {
@@ -33,7 +35,7 @@ public class CafeService {
 
     public Cafe save(Cafe cafe) {
         return cafeRepository.saveAndFlush(cafe);
-        //checkNew
+
             }
 
 
@@ -54,7 +56,9 @@ public class CafeService {
         LocalDateTime start = LocalDate.now().atTime(0, 0);
         LocalDateTime end = LocalDate.now().atTime(10, 59, 59);
 
-        List<User> users = userRepository.getAllWithRole("USER");
+        List<User> users = userRepository.findUserByRole(Role.USER);
+                //Stream.of(Role.USER)
+                //.collect(Collectors.toCollection(HashSet::new)));
 
         for (User user : users) {
             Optional<CafeVote> vote = voteRepository.findTopByUserAndCreatedBetweenOrderByCreatedDesc(user, start, end);

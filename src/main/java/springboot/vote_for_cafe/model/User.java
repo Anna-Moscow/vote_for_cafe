@@ -1,18 +1,21 @@
 package springboot.vote_for_cafe.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.util.CollectionUtils;
 import springboot.vote_for_cafe.model.Role;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.EnumSet;
 import java.util.Set;
 
 @Entity
 @Table (name ="users")
-public class User {
+public class User implements Serializable {
 
 
     @Id
@@ -28,6 +31,18 @@ public class User {
     @NotBlank
     @Size(max = 40)
     public String surname;
+
+    @Column(name = "email", nullable = false, unique = true)
+
+    @NotBlank
+    @Size(max = 100)
+    private String email;
+
+    @Column(name = "password", nullable = false)
+    @NotBlank
+    @Size(max = 100)
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    private String password;
 
     @Enumerated(EnumType.STRING)
     @ElementCollection(fetch = FetchType.EAGER)
@@ -67,6 +82,22 @@ public class User {
 
     public Integer getId() {
         return id;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public User() {

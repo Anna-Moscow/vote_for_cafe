@@ -78,11 +78,16 @@ public class DishControllerTest {
 
 
     @Test
-
     void delete() throws Exception {
         perform(MockMvcRequestBuilders.delete("/admin/dishes/" + DISH1_ID))
                 .andExpect(status().isNoContent());
-      // нужна ли такая проверка и как сделать
+      // нужна ли такая проверка и как сделать? в образце NotFoundException
       //assertThrows(ChangeSetPersister.EntityNotFoundException.class, () -> dishRepository.getById(DISH1_ID));
+
+        // нужен ли ValidationUtil из образца?
+
+        // нужно ли тестировать отдельно репозитории? в образце на spring boot этого нет
+        // как сделать тест на create без json?
+
     }
 }

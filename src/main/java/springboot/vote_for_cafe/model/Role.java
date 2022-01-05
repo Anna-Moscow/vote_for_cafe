@@ -1,6 +1,17 @@
 package springboot.vote_for_cafe.model;
 
-public enum Role {
+import org.springframework.security.core.GrantedAuthority;
+
+public enum Role implements GrantedAuthority {
     USER,
-    ADMIN
+    ADMIN;
+
+    @Override
+    public String getAuthority() {
+        //   https://stackoverflow.com/a/19542316/548473
+        return "ROLE_" + name();
+    }
+
+
+
 }

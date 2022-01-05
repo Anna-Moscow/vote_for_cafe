@@ -12,6 +12,7 @@ import springboot.vote_for_cafe.model.Dish;
 import springboot.vote_for_cafe.repositiry.CafeRepository;
 import springboot.vote_for_cafe.repositiry.DishRepository;
 import springboot.vote_for_cafe.service.DishService;
+import springboot.vote_for_cafe.util.ValidationUtil;
 
 import java.net.URI;
 import java.util.List;
@@ -33,14 +34,15 @@ public class DishController {
         this.repository = repository;
     }
 
-    @GetMapping("cafe/{cafeId}/dishes") // зачем model в параметрах?
+    @GetMapping("api/cafe/{cafeId}/dishes") // зачем model в параметрах?
     public List<Dish> getAllDishes( @PathVariable int cafeId) {
         return service.getAllDishes(cafeId);
 
     }
 
-    @PostMapping(value = "/admin/cafe/{cafeId}/dishes")
+    @PostMapping(value = "api/admin/cafe/{cafeId}/dishes")
     public ResponseEntity<Dish> save (@PathVariable int cafeId, @RequestBody Dish dish) {
+        // здесь валидация в сервисе. правильно ли это?
          Dish created = service.save(cafeId, dish);
         URI uri = ServletUriComponentsBuilder.fromCurrentContextPath()
                 .path("/dishes" + "/{id}")
@@ -49,7 +51,7 @@ public class DishController {
         return ResponseEntity.created(uri).body(created);
     }
 
-    @DeleteMapping("/admin/dishes/{id}")
+    @DeleteMapping("api/admin/dishes/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable int id) {
         service.delete(id);
