@@ -31,8 +31,8 @@ import java.util.Map;
 
 // посмотреть видео про этот метод и обработку ошибок из topjava
     // нужны еще какие-то виды исключений? мб notfound?
-    //
-    @SuppressWarnings("unchecked")
+    // тесты на исключения и security
+@SuppressWarnings("unchecked")
     private <T> ResponseEntity<T> createResponseEntity(WebRequest request, ErrorAttributeOptions options, String msg, HttpStatus status) {
         Map<String, Object> body = errorAttributes.getErrorAttributes(request, options);
         if (msg != null) {

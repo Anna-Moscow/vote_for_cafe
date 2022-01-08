@@ -1,6 +1,7 @@
 package springboot.vote_for_cafe.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -28,6 +29,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     private final UserRepository userRepository;
+
+    @Bean
+    @Override
+    // https://stackoverflow.com/a/70176629/548473
+    public UserDetailsService userDetailsServiceBean() throws Exception {
+        return super.userDetailsServiceBean();
+    }
 
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {

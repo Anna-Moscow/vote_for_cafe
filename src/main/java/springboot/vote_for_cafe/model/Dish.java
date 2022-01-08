@@ -1,18 +1,21 @@
 package springboot.vote_for_cafe.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 import org.hibernate.validator.constraints.Range;
+import org.springframework.util.Assert;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "dishes")
-public class Dish {
+public class Dish implements Serializable {
 
 
     @Id
@@ -31,7 +34,14 @@ public class Dish {
 
     @ManyToOne
     @JoinColumn(name="cafe_id", nullable=false)
+    @JsonBackReference
     Cafe cafe;
+
+    // for tests
+    public int id() {
+        Assert.notNull(id, "Entity must have id");
+        return id;
+    }
 
 
     public String getDescription() {
@@ -60,6 +70,12 @@ public class Dish {
         this.price = price;
     }
 
+    public Dish(Integer id, String description, int price) {
+        this.id = id;
+        this.description = description;
+        this.price = price;
+    }
+
     public void setId(Integer id) {
         this.id = id;
     }
@@ -72,5 +88,9 @@ public class Dish {
         this.cafe = cafe;
     }
 
+    @Override
+    public String toString() {
+        return "{Dish: id - " + id + ", description - " + description + ", price: " + price + "}";
+    }
 
 }

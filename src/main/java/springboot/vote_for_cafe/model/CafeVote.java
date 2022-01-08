@@ -65,4 +65,9 @@ public class CafeVote {
     public void setCafe(Cafe cafe) {
         this.cafe = cafe;
     }
+
+    @Override
+    public String toString() {
+        return "{CafeVote: id - " + id + ", user - " + user + ", cafe: " + cafe + "}";
+    }
 }

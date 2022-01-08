@@ -47,12 +47,6 @@ public class CafeController {
 
         return ResponseEntity.created(uri).body(created);
     }
-//
-//    @GetMapping("/cafes")
-//    public List<Cafe> getCafes(Model model) {
-//        return cafeRepository.findAll();
-//
-//    }
 
 
     @GetMapping("api/cafes/votes")

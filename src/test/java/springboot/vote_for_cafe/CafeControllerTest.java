@@ -4,6 +4,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
@@ -17,8 +19,9 @@ import springboot.vote_for_cafe.repositiry.DishRepository;
 import java.util.Map;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static springboot.vote_for_cafe.TestData.CAFE1_ID;
+import static springboot.vote_for_cafe.TestData.*;
 
 @SpringBootTest
 @Transactional
@@ -35,19 +38,22 @@ public class CafeControllerTest {
     }
 
 
-
     @Autowired
     private CafeRepository cafeRepository;
 
-
-
-
-
     @Test
+    @WithUserDetails(value = TestData.USER_MAIL)
     public void getAllWithVotes() throws Exception {
 
-        perform(MockMvcRequestBuilders.get("/cafes/votes"))
+        perform(MockMvcRequestBuilders.get("/api/cafes/votes"))
                 .andExpect(status().isOk())
-                .andDo(print());
+                .andDo(print())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON)) //postman - там подробнее
+//                .andExpect(content().string(JsonUtil.writeValue(dishes))); // лайфхак
+                .andExpect(CAFE_MATCHER.contentJson(dishes));
     }         //не работает !!! (с аннотацией Param  в Repo  и без нее тоже)
+
+
+
+    //    public void save()
 }

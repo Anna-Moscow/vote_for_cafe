@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.core.env.Environment;
@@ -27,9 +28,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.filter.CharacterEncodingFilter;
 import springboot.vote_for_cafe.controller.DishController;
+import springboot.vote_for_cafe.model.Dish;
 import springboot.vote_for_cafe.repositiry.DishRepository;
 import springboot.vote_for_cafe.service.DishService;
 import springboot.vote_for_cafe.TestData;
+import springboot.vote_for_cafe.util.JsonUtil;
 
 import javax.annotation.PostConstruct;
 
@@ -41,6 +44,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static springboot.vote_for_cafe.TestData.CAFE1_ID;
 import static springboot.vote_for_cafe.TestData.DISH1_ID;
+import static springboot.vote_for_cafe.TestData.dishes;
+import static springboot.vote_for_cafe.TestData.DISH_MATCHER;
+import static springboot.vote_for_cafe.TestData.DISH_IGNORE_CAFE_MATCHER;
 
 
 @SpringBootTest
@@ -50,7 +56,6 @@ import static springboot.vote_for_cafe.TestData.DISH1_ID;
 
 public class DishControllerTest {
 
-
     @Autowired
     private MockMvc mockMvc;
 
@@ -58,36 +63,70 @@ public class DishControllerTest {
         return mockMvc.perform(builder);
     }
 
-
-
     @Autowired
     private DishRepository dishRepository;
 
 
 
     @Test
+    @WithUserDetails(value = TestData.USER_MAIL)
     void getAllDishes() throws Exception {
-        perform(MockMvcRequestBuilders.get("/cafe/" + CAFE1_ID + "/dishes"))
+        perform(MockMvcRequestBuilders.get("/api/cafe/" + CAFE1_ID + "/dishes"))
                 .andExpect(status().isOk())
-                .andDo(print());
-
-        // нужно ли вставлять, если без фронтэнда?
-        //.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                //.andExpect(MEAL_MATCHER.contentJson(meal1));
-    }
-
+                .andDo(print())
+        // нужно ли вставлять Json, если без фронтэнда?
+                // если нет, то MatcherFactory & JsonUtil надо удалить
+        .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON)) //postman - там подробнее
+//                .andExpect(content().string(JsonUtil.writeValue(dishes))); // лайфхак
+                .andExpect(DISH_MATCHER.contentJson(dishes));
+                          }
 
     @Test
-    void delete() throws Exception {
-        perform(MockMvcRequestBuilders.delete("/admin/dishes/" + DISH1_ID))
+    @WithUserDetails(value = TestData.ADMIN_MAIL) //почему игнорируется кафе? как это работает?
+    void save() throws Exception {
+        Dish newDish = TestData.getNew();
+        ResultActions action = perform(MockMvcRequestBuilders
+                .post("/api/admin/cafe/" + CAFE1_ID + "/dishes")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(JsonUtil.writeValue(newDish)));
+
+        Dish created = DISH_IGNORE_CAFE_MATCHER.readFromJson(action);
+        int newId = created.id();
+        newDish.setId(newId);
+        DISH_IGNORE_CAFE_MATCHER.assertMatch(created, newDish);
+        DISH_IGNORE_CAFE_MATCHER.assertMatch(dishRepository.getById(newId), newDish);
+    }
+/*
+    // для примера пердачи парметров не в get
+    @Test
+    @WithUserDetails(value = USER_MAIL)
+    void update() throws Exception {
+        Meal updated = getUpdated();
+        perform(MockMvcRequestBuilders.put(REST_URL + MEAL1_ID)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(JsonUtil.writeValue(updated)))
                 .andExpect(status().isNoContent());
-      // нужна ли такая проверка и как сделать? в образце NotFoundException
-      //assertThrows(ChangeSetPersister.EntityNotFoundException.class, () -> dishRepository.getById(DISH1_ID));
 
-        // нужен ли ValidationUtil из образца?
+        MEAL_MATCHER.assertMatch(mealRepository.getById(MEAL1_ID), updated);
+    } */
 
-        // нужно ли тестировать отдельно репозитории? в образце на spring boot этого нет
-        // как сделать тест на create без json?
+    @Test
+    void unauthorizedGetAllDishes() throws Exception {
+        perform(MockMvcRequestBuilders.get("/api/cafe/" + CAFE1_ID + "/dishes"))
+                .andExpect(status().isUnauthorized())
+                .andDo(print());
+    }
+
+    @Test
+    @WithUserDetails(value = TestData.ADMIN_MAIL)
+    void delete() throws Exception {
+        perform(MockMvcRequestBuilders.delete("/api/admin/dishes/" + DISH1_ID))
+                .andExpect(status().isNoContent());
+        assertFalse(dishRepository.findById(DISH1_ID).isPresent());
+
+         // нужно ли тестировать отдельно репозитории? в образце на spring boot этого нет
+
+
 
     }
 }

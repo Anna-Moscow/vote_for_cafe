@@ -1,10 +1,6 @@
 package springboot.vote_for_cafe.service;
 
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import springboot.vote_for_cafe.model.Cafe;
 import springboot.vote_for_cafe.model.CafeVote;
 import springboot.vote_for_cafe.model.Role;
@@ -13,12 +9,10 @@ import springboot.vote_for_cafe.repositiry.CafeRepository;
 import springboot.vote_for_cafe.repositiry.UserRepository;
 import springboot.vote_for_cafe.repositiry.VoteRepository;
 
-import java.net.URI;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Service
 public class CafeService {
@@ -46,17 +40,18 @@ public class CafeService {
         //
         // voteRepository.save(new CafeVote(user, cafe));}
 
-    @GetMapping("/cafes/votes")
+
     public Map<String, Integer> getAllWithVotes() {
+
 
         Map<String, Integer> scores = new HashMap<>();
         cafeRepository.findAll().forEach(cafe -> scores.put(cafe.getName(), 0));
 
         List<CafeVote> votes = new ArrayList<>();
-        LocalDateTime start = LocalDate.now().atTime(0, 0);
+        LocalDateTime start = LocalDate.now().atTime(0, 0, 00);
         LocalDateTime end = LocalDate.now().atTime(10, 59, 59);
 
-        List<User> users = userRepository.findUserByRole(Role.USER);
+        List<User> users = userRepository.findUserByRoles(Role.USER);
                 //Stream.of(Role.USER)
                 //.collect(Collectors.toCollection(HashSet::new)));
 
