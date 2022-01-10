@@ -37,6 +37,7 @@ public class Dish implements Serializable {
     @JsonBackReference
     Cafe cafe;
 
+
     // for tests
     public int id() {
         Assert.notNull(id, "Entity must have id");

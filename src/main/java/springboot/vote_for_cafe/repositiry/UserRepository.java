@@ -12,9 +12,10 @@ import java.util.Set;
 
 public interface UserRepository extends JpaRepository<User, Integer> {
 
-   // @Query("SELECT u FROM User u JOIN u.roles WHERE role = :role")
+  // @Query("SELECT u FROM User u JOIN u.roles WHERE role = :role")
+  // List<User> findUserByRole(Role role);
 
-    List<User> findUserByRoles(Role role);
+    List<User> findUserByRoles(Role role); //  юзеры добавляются (сначала после того, как его  убрали стало 0 вместо null
     //нужно добавить анотацию manytomany к полю roles? передать SET?
 
     @Query("SELECT u FROM User u WHERE u.email = LOWER(:email)")

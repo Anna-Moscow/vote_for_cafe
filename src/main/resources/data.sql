@@ -21,13 +21,15 @@ VALUES ('USER', 1),
        ('USER', 4);
 
 INSERT INTO votes(created, cafe_id, user_id)
-VALUES (now(), 1, 1),
-       (now(), 1, 2),
-       (now(), 2, 3),
-       (now(), 2, 4);
+VALUES (current_date + INTERVAL '10' hour, 1, 1), /*голос за 1 */
+       (current_date + INTERVAL '10' hour, 1, 2), /*админ. нет голоса*/
+       (current_date + INTERVAL '12' hour, 2, 3), /* поздно. нет голоса  !не работает, этот голос появляяется*/
+       (current_date + INTERVAL '1' hour, 2, 4), /*голос за 2*/
+       (current_date + INTERVAL '2' hour, 1, 4);/* пользователь передумал*/
 
 
-'2021-01-01 10:00:00' atTime(10, 59, 59)
+
+
 
 
 

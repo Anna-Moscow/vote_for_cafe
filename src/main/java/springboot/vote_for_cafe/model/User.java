@@ -1,5 +1,6 @@
 package springboot.vote_for_cafe.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.util.CollectionUtils;
 import springboot.vote_for_cafe.model.Role;
@@ -11,6 +12,7 @@ import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.EnumSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -51,6 +53,10 @@ public class User implements Serializable {
     @Column(name = "role")
     @JoinColumn(name = "user_id")
     public Set<Role> roles;
+
+    @OneToMany(mappedBy="user")
+    @JsonManagedReference
+    private List<CafeVote> votes;
 
     public String getName() {
         return name;
@@ -109,9 +115,21 @@ public class User implements Serializable {
         setRoles(roles);
     }
 
+    // нормален ли такой конструктор с EnumSet?
+    public User(Integer id,  String name, String surname,  String email, String password, Role role, Role... roles) {
+        this.id = id;
+        this.name = name;
+        this.surname = surname;
+        this.email = email;
+        this.password = password;
+        EnumSet.of(role, roles);
+    }
+
     public void setRoles(Collection<Role> roles) {
         this.roles = CollectionUtils.isEmpty(roles) ? EnumSet.noneOf(Role.class) : EnumSet.copyOf(roles);
     }
 
-
+    public void setVotes(List<CafeVote> votes) {
+        this.votes = votes;
+    }
 }

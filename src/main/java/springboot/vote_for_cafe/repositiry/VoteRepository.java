@@ -13,5 +13,6 @@ import java.util.Optional;
 public interface VoteRepository extends JpaRepository<CafeVote, Integer> {
 
     Optional<CafeVote> findTopByUserAndCreatedBetweenOrderByCreatedDesc(User user, LocalDateTime from , LocalDateTime to);
-
+    //Optional<CafeVote> findCreatedBetweenAndTopByUserOrderByCreatedDesc(User user, LocalDateTime from , LocalDateTime to);
+    Optional<CafeVote> findTopByUserOrderByCreatedDesc (User user); // тоже было null
 }

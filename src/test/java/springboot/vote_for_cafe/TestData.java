@@ -1,13 +1,11 @@
 package springboot.vote_for_cafe;
 
 import springboot.vote_for_cafe.controller.MatcherFactory;
-import springboot.vote_for_cafe.model.Cafe;
-import springboot.vote_for_cafe.model.Dish;
+import springboot.vote_for_cafe.model.*;
 
+import java.time.LocalDate;
 import java.time.Month;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 import static java.time.LocalDateTime.of;
 
@@ -26,19 +24,41 @@ public class TestData {
     public static final MatcherFactory.Matcher<Cafe> CAFE_MATCHER =
             MatcherFactory.usingIgnoringFieldsComparator(Cafe.class);
 
+
+
     public static final Dish dish1 = new Dish(DISH1_ID,"Салат Цезарь", 500);
     public static final Dish dish2 = new Dish(DISH1_ID + 1,"Лингвини с лососем", 600);
 
     public static final List<Dish> dishes = List.of(dish1, dish2);
 
    public static final Cafe cafe1 = new Cafe(CAFE1_ID,"Ресторан Достоевский");
+    public static final Cafe cafe2 = new Cafe(CAFE1_ID + 1,"Кафе Эстерхази");
 
-    static {
-        cafe1.setDishes(dishes);
-         } // правильно ли так делать?
+
 
     public static Dish getNew() {
         return new Dish(null, "Созданное блюдо", 100);
     }
 
+    // голоса отсюда начинаются
+    public static final int USER1_ID = 1;
+       public static final User user1 = new User(USER1_ID, "Джон", "Смит", "smith@yandex.ru", "password1", Role.USER);
+    public static final User user4 = new User(USER1_ID + 3, "Анна", "Каренина", "karenina@yandex.ru", "password4", Role.USER);
+
+
+    public static final int VOTE1_ID = 1;
+    public static final CafeVote vote1 = new CafeVote(VOTE1_ID, LocalDate.now().atTime(10, 0));
+    public static final CafeVote vote4 = new CafeVote(VOTE1_ID + 3,LocalDate.now().atTime(1, 0));
+
+    public static final Map<String, Integer> votes = new HashMap<>();
+
+    static {
+        votes.put (cafe1.getName(), 1);
+        votes.put (cafe2.getName(), 1);
+        cafe1.setDishes(dishes);
+        //cafe1.setVotes(List.of(vote1));
+        //cafe2.setVotes(List.of(vote4));
+        //user1.setVotes(List.of(vote1));
+       // user4.setVotes(List.of(vote4));
+    } // правильно ли так делать?
 }

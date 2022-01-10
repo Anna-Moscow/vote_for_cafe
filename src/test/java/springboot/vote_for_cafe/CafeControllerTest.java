@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
 import springboot.vote_for_cafe.repositiry.CafeRepository;
 import springboot.vote_for_cafe.repositiry.DishRepository;
+import springboot.vote_for_cafe.util.JsonUtil;
 
 import java.util.Map;
 
@@ -49,9 +50,11 @@ public class CafeControllerTest {
                 .andExpect(status().isOk())
                 .andDo(print())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON)) //postman - там подробнее
-//                .andExpect(content().string(JsonUtil.writeValue(dishes))); // лайфхак
-                .andExpect(CAFE_MATCHER.contentJson(dishes));
-    }         //не работает !!! (с аннотацией Param  в Repo  и без нее тоже)
+              // .andExpect(content().string(JsonUtil.writeValue(dishes))); // лайфхак
+               // .andExpect(CAFE_MATCHER.contentJson(dishes));
+        .andExpect(content().string(JsonUtil.writeValue(TestData.votes)));
+       // assertThat(result, hasEntry("Japan", false));
+    }
 
 
 

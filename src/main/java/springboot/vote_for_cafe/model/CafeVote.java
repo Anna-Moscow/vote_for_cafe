@@ -1,6 +1,8 @@
 package springboot.vote_for_cafe.model;
 
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
@@ -19,16 +21,23 @@ public class CafeVote {
 
     @ManyToOne // не 1 к 1? голосов много, а засчитываетс только последний
     @JoinColumn(name="user_id", nullable=false)
+    @JsonBackReference
     private User user;
 
-    @OneToOne
+    @ManyToOne // не 1 к 1? объединятся ли голоса от разных юзеров в коллекцию?
     @JoinColumn(name="cafe_id", nullable=false)
+    @JsonBackReference
     private Cafe cafe;
 
     public CafeVote(User user, Cafe cafe, LocalDateTime created) {
         this.created = created;
         this.user = user;
         this.cafe = cafe;
+    }
+
+    public CafeVote(Integer id,  LocalDateTime created) {
+        this.id = id;
+        this.created = created;
     }
 
     public CafeVote() {

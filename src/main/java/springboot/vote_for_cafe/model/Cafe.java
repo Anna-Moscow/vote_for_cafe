@@ -32,6 +32,10 @@ public class Cafe implements Serializable {
     @JsonManagedReference
     private List<Dish> dishes;
 
+    @OneToMany(mappedBy="cafe")
+    @JsonManagedReference
+    private List<CafeVote> votes;
+
     public Cafe() { }
 
     public String getName() {
@@ -65,6 +69,10 @@ public class Cafe implements Serializable {
 
     public void setDishes(List<Dish> dishes) {
         this.dishes = dishes;
+    }
+
+    public void setVotes(List<CafeVote> votes) {
+        this.votes = votes;
     }
 
     @Override
