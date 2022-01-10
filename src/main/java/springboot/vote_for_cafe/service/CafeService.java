@@ -8,6 +8,7 @@ import springboot.vote_for_cafe.model.User;
 import springboot.vote_for_cafe.repositiry.CafeRepository;
 import springboot.vote_for_cafe.repositiry.UserRepository;
 import springboot.vote_for_cafe.repositiry.VoteRepository;
+import springboot.vote_for_cafe.util.TimeFilterUtil;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -54,6 +55,7 @@ public class CafeService {
         List<User> users = userRepository.findUserByRoles(Role.USER); // размер 3 -ok
                 //Stream.of(Role.USER)
                 //.collect(Collectors.toCollection(HashSet::new)));
+
 
         for (User user : users) {
             Optional<CafeVote> vote = voteRepository.findTopByUserAndCreatedBetweenOrderByCreatedDesc(user, start, end);

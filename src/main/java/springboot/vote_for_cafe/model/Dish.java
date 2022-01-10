@@ -34,7 +34,7 @@ public class Dish implements Serializable {
 
     @ManyToOne
     @JoinColumn(name="cafe_id", nullable=false)
-    @JsonBackReference
+    @JsonBackReference (value = "3")
     Cafe cafe;
 
 

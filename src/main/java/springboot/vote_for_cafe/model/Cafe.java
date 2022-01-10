@@ -7,6 +7,7 @@ import org.hibernate.annotations.BatchSize;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
+import org.springframework.util.Assert;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -29,11 +30,11 @@ public class Cafe implements Serializable {
 
 
     @OneToMany(mappedBy="cafe")
-    @JsonManagedReference
+    @JsonManagedReference (value = "3")
     private List<Dish> dishes;
 
     @OneToMany(mappedBy="cafe")
-    @JsonManagedReference
+    @JsonManagedReference (value = "2")
     private List<CafeVote> votes;
 
     public Cafe() { }
@@ -55,7 +56,11 @@ public class Cafe implements Serializable {
         this.name = name;
             }
 
-
+    // for tests
+    public int id() {
+        Assert.notNull(id, "Entity must have id");
+        return id;
+    }
 
     public Integer getId() { return id; }
 

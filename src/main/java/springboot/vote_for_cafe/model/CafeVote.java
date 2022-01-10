@@ -21,12 +21,12 @@ public class CafeVote {
 
     @ManyToOne // не 1 к 1? голосов много, а засчитываетс только последний
     @JoinColumn(name="user_id", nullable=false)
-    @JsonBackReference
+    @JsonBackReference (value = "1")
     private User user;
 
     @ManyToOne // не 1 к 1? объединятся ли голоса от разных юзеров в коллекцию?
     @JoinColumn(name="cafe_id", nullable=false)
-    @JsonBackReference
+    @JsonBackReference (value = "2")
     private Cafe cafe;
 
     public CafeVote(User user, Cafe cafe, LocalDateTime created) {

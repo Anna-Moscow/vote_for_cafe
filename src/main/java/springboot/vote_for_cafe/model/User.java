@@ -55,7 +55,7 @@ public class User implements Serializable {
     public Set<Role> roles;
 
     @OneToMany(mappedBy="user")
-    @JsonManagedReference
+    @JsonManagedReference (value = "1")
     private List<CafeVote> votes;
 
     public String getName() {
@@ -78,9 +78,7 @@ public class User implements Serializable {
         return roles;
     }
 
-    public void setRoles(Set<Role> roles) {
-        this.roles = roles;
-    }
+    //public void setRoles(Set<Role> roles) {this.roles = roles;}
 
     public void setId(Integer id) {
         this.id = id;

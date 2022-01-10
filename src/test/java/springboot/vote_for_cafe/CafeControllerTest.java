@@ -13,6 +13,8 @@ import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilde
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
+import springboot.vote_for_cafe.model.Cafe;
+import springboot.vote_for_cafe.model.Dish;
 import springboot.vote_for_cafe.repositiry.CafeRepository;
 import springboot.vote_for_cafe.repositiry.DishRepository;
 import springboot.vote_for_cafe.util.JsonUtil;
@@ -58,5 +60,19 @@ public class CafeControllerTest {
 
 
 
-    //    public void save()
+    @Test
+    @WithUserDetails(value = TestData.ADMIN_MAIL)
+    void save() throws Exception {
+        Cafe newCafe = TestData.getNewCafe();
+        ResultActions action = perform(MockMvcRequestBuilders
+                .post("/api/admin/cafes")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(JsonUtil.writeValue(newCafe)));
+
+        Cafe created = CAFE_IGNORE_MATCHER.readFromJson(action);
+        int newId = created.id();
+        newCafe.setId(newId);
+        CAFE_IGNORE_MATCHER.assertMatch(created, newCafe);
+        CAFE_IGNORE_MATCHER.assertMatch(cafeRepository.getById(newId), newCafe);
+    }
 }

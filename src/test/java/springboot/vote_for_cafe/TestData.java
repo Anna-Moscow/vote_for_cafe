@@ -21,6 +21,9 @@ public class TestData {
     public static final MatcherFactory.Matcher<Dish> DISH_IGNORE_CAFE_MATCHER =
             MatcherFactory.usingIgnoringFieldsComparator(Dish.class, "cafe");
 
+    public static final MatcherFactory.Matcher<Cafe> CAFE_IGNORE_MATCHER =
+            MatcherFactory.usingIgnoringFieldsComparator(Cafe.class, "dishes", "votes");
+
     public static final MatcherFactory.Matcher<Cafe> CAFE_MATCHER =
             MatcherFactory.usingIgnoringFieldsComparator(Cafe.class);
 
@@ -36,8 +39,12 @@ public class TestData {
 
 
 
-    public static Dish getNew() {
+    public static Dish getNewDish() {
         return new Dish(null, "Созданное блюдо", 100);
+    }
+
+    public static Cafe getNewCafe() {
+        return new Cafe(null, "Созданное кафе");
     }
 
     // голоса отсюда начинаются
@@ -53,8 +60,8 @@ public class TestData {
     public static final Map<String, Integer> votes = new HashMap<>();
 
     static {
-        votes.put (cafe1.getName(), 1);
-        votes.put (cafe2.getName(), 1);
+        votes.put (cafe1.getName(), 2);
+        votes.put (cafe2.getName(), 0);
         cafe1.setDishes(dishes);
         //cafe1.setVotes(List.of(vote1));
         //cafe2.setVotes(List.of(vote4));

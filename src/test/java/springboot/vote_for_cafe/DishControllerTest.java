@@ -84,7 +84,7 @@ public class DishControllerTest {
     @Test
     @WithUserDetails(value = TestData.ADMIN_MAIL) //почему игнорируется кафе? как это работает?
     void save() throws Exception {
-        Dish newDish = TestData.getNew();
+        Dish newDish = TestData.getNewDish();
         ResultActions action = perform(MockMvcRequestBuilders
                 .post("/api/admin/cafe/" + CAFE1_ID + "/dishes")
                 .contentType(MediaType.APPLICATION_JSON)
