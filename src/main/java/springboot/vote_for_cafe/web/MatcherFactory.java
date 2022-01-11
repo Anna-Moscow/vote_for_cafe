@@ -1,4 +1,4 @@
-package springboot.vote_for_cafe.controller;
+package springboot.vote_for_cafe.web;
 
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;

@@ -1,42 +1,20 @@
 package springboot.vote_for_cafe;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.jupiter.api.Assumptions;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.test.context.support.WithUserDetails;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.support.MessageSourceAccessor;
-import org.springframework.core.env.Environment;
-import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.test.context.junit.jupiter.web.SpringJUnitWebConfig;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.Assert;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.context.WebApplicationContext;
-import org.springframework.web.filter.CharacterEncodingFilter;
-import springboot.vote_for_cafe.controller.DishController;
 import springboot.vote_for_cafe.model.Dish;
 import springboot.vote_for_cafe.repositiry.DishRepository;
-import springboot.vote_for_cafe.service.DishService;
-import springboot.vote_for_cafe.TestData;
 import springboot.vote_for_cafe.util.JsonUtil;
-
-import javax.annotation.PostConstruct;
-
-import java.util.Locale;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -71,7 +49,7 @@ public class DishControllerTest {
     @Test
     @WithUserDetails(value = TestData.USER_MAIL)
     void getAllDishes() throws Exception {
-        perform(MockMvcRequestBuilders.get("/api/cafe/" + CAFE1_ID + "/dishes"))
+        perform(MockMvcRequestBuilders.get("/api/cafes/" + CAFE1_ID + "/dishes"))
                 .andExpect(status().isOk())
                 .andDo(print())
         // нужно ли вставлять Json, если без фронтэнда?
@@ -83,10 +61,10 @@ public class DishControllerTest {
 
     @Test
     @WithUserDetails(value = TestData.ADMIN_MAIL) //почему игнорируется кафе? как это работает?
-    void save() throws Exception {
+    void create() throws Exception {
         Dish newDish = TestData.getNewDish();
         ResultActions action = perform(MockMvcRequestBuilders
-                .post("/api/admin/cafe/" + CAFE1_ID + "/dishes")
+                .post("/api/admin/cafes/" + CAFE1_ID + "/dishes")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JsonUtil.writeValue(newDish)));
 
@@ -112,7 +90,7 @@ public class DishControllerTest {
 
     @Test
     void unauthorizedGetAllDishes() throws Exception {
-        perform(MockMvcRequestBuilders.get("/api/cafe/" + CAFE1_ID + "/dishes"))
+        perform(MockMvcRequestBuilders.get("/api/cafes/" + CAFE1_ID + "/dishes"))
                 .andExpect(status().isUnauthorized())
                 .andDo(print());
     }

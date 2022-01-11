@@ -1,10 +1,10 @@
 package springboot.vote_for_cafe;
 
-import springboot.vote_for_cafe.controller.MatcherFactory;
+import springboot.vote_for_cafe.web.MatcherFactory;
 import springboot.vote_for_cafe.model.*;
+import springboot.vote_for_cafe.to.CafeTo;
 
 import java.time.LocalDate;
-import java.time.Month;
 import java.util.*;
 
 import static java.time.LocalDateTime.of;
@@ -27,6 +27,10 @@ public class TestData {
     public static final MatcherFactory.Matcher<Cafe> CAFE_MATCHER =
             MatcherFactory.usingIgnoringFieldsComparator(Cafe.class);
 
+    public static final MatcherFactory.Matcher<CafeTo> CAFE_TO_MATCHER =
+            MatcherFactory.usingIgnoringFieldsComparator(CafeTo.class);
+
+
 
 
     public static final Dish dish1 = new Dish(DISH1_ID,"Салат Цезарь", 500);
@@ -36,6 +40,8 @@ public class TestData {
 
    public static final Cafe cafe1 = new Cafe(CAFE1_ID,"Ресторан Достоевский");
     public static final Cafe cafe2 = new Cafe(CAFE1_ID + 1,"Кафе Эстерхази");
+
+    public static final List<Cafe> cafes = List.of(cafe1, cafe2);
 
 
 
@@ -57,9 +63,11 @@ public class TestData {
     public static final CafeVote vote1 = new CafeVote(VOTE1_ID, LocalDate.now().atTime(10, 0));
     public static final CafeVote vote4 = new CafeVote(VOTE1_ID + 3,LocalDate.now().atTime(1, 0));
 
+    //public static final List<CafeTo> votes = new ArrayList<>();
     public static final Map<String, Integer> votes = new HashMap<>();
 
     static {
+      //  votes.add (cafe1);
         votes.put (cafe1.getName(), 2);
         votes.put (cafe2.getName(), 0);
         cafe1.setDishes(dishes);

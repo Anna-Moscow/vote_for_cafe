@@ -17,6 +17,7 @@ import springboot.vote_for_cafe.model.Cafe;
 import springboot.vote_for_cafe.model.Dish;
 import springboot.vote_for_cafe.repositiry.CafeRepository;
 import springboot.vote_for_cafe.repositiry.DishRepository;
+import springboot.vote_for_cafe.util.CafeUtil;
 import springboot.vote_for_cafe.util.JsonUtil;
 
 import java.util.Map;
@@ -46,23 +47,23 @@ public class CafeControllerTest {
 
     @Test
     @WithUserDetails(value = TestData.USER_MAIL)
-    public void getAllWithVotes() throws Exception {
+    public void getAll() throws Exception {
 
-        perform(MockMvcRequestBuilders.get("/api/cafes/votes"))
+        perform(MockMvcRequestBuilders.get("/api/cafes"))
                 .andExpect(status().isOk())
                 .andDo(print())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON)) //postman - там подробнее
               // .andExpect(content().string(JsonUtil.writeValue(dishes))); // лайфхак
-               // .andExpect(CAFE_MATCHER.contentJson(dishes));
-        .andExpect(content().string(JsonUtil.writeValue(TestData.votes)));
-       // assertThat(result, hasEntry("Japan", false));
+
+                .andExpect(CAFE_TO_MATCHER.contentJson(CafeUtil.getTos(cafes, votes)));
+
     }
 
 
 
     @Test
     @WithUserDetails(value = TestData.ADMIN_MAIL)
-    void save() throws Exception {
+    void create() throws Exception {
         Cafe newCafe = TestData.getNewCafe();
         ResultActions action = perform(MockMvcRequestBuilders
                 .post("/api/admin/cafes")

@@ -1,4 +1,4 @@
-package springboot.vote_for_cafe.controller;
+package springboot.vote_for_cafe.web;
 
 import org.springframework.boot.web.error.ErrorAttributeOptions;
 import org.springframework.boot.web.servlet.error.ErrorAttributes;
@@ -15,7 +15,7 @@ import java.util.Map;
 @RestControllerAdvice
 
 
-
+// он нигде не используется, это нормально?
     public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         private final ErrorAttributes errorAttributes;
 

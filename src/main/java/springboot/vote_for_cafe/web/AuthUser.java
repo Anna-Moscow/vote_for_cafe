@@ -1,4 +1,4 @@
-package springboot.vote_for_cafe.controller;
+package springboot.vote_for_cafe.web;
 
 import org.springframework.lang.NonNull;
 import springboot.vote_for_cafe.model.User;

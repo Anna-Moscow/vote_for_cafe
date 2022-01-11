@@ -15,5 +15,5 @@ public interface VoteRepository extends JpaRepository<CafeVote, Integer> {
     Optional<CafeVote> findTopByUserAndCreatedBetweenOrderByCreatedDesc(User user, LocalDateTime from , LocalDateTime to);
     //сначала ищет топ для каждого юзера, а потом уже фильтрует по дате
     //Optional<CafeVote> findCreatedBetweenAndTopByUserOrderByCreatedDesc(User user, LocalDateTime from , LocalDateTime to);
-    Optional<CafeVote> findTopByUserOrderByCreatedDesc (User user); // тоже было null
+
 }

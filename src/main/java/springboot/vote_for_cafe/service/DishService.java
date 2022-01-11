@@ -37,10 +37,9 @@ public class DishService {
 
 
     public Dish save ( int cafeId,  Dish dish)  {
-        Cafe cafe = cafeRepository.findById(cafeId).orElse(null); //что делать, если null
-        dish.setCafe(cafe);
-        ValidationUtil.checkNew(dish);
-        return dishRepository.saveAndFlush(dish);
+        dish.setCafe(cafeRepository.getById(cafeId));
+
+        return dishRepository.save(dish);
             }
 
 

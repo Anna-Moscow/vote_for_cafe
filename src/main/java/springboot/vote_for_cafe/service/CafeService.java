@@ -29,7 +29,7 @@ public class CafeService {
     }
 
     public Cafe save(Cafe cafe) {
-        return cafeRepository.saveAndFlush(cafe);
+        return cafeRepository.save(cafe);
 
             }
 
@@ -41,6 +41,9 @@ public class CafeService {
         //
         // voteRepository.save(new CafeVote(user, cafe));}
 
+    public List<Cafe> getAll() {
+       return cafeRepository.findAll();
+    }
 
     public Map<String, Integer> getAllWithVotes() {
 
@@ -49,31 +52,23 @@ public class CafeService {
         cafeRepository.findAll().forEach(cafe -> scores.put(cafe.getName(), 0));
 
         List<CafeVote> votes = new ArrayList<>();
-        LocalDateTime start = LocalDate.now().atTime(0, 0, 00);
+        LocalDateTime start = LocalDate.now().atTime(0, 0, 0);
         LocalDateTime end = LocalDate.now().atTime(10, 59, 59);
 
-        List<User> users = userRepository.findUserByRoles(Role.USER); // размер 3 -ok
-                //Stream.of(Role.USER)
-                //.collect(Collectors.toCollection(HashSet::new)));
+        List<User> users = userRepository.findUserByRoles(Role.USER);
 
 
         for (User user : users) {
             Optional<CafeVote> vote = voteRepository.findTopByUserAndCreatedBetweenOrderByCreatedDesc(user, start, end);
-            //Optional<CafeVote> vote = voteRepository.findTopByUserOrderByCreatedDesc(user); без фильтра по дате тоже 0
-            if (vote.isPresent()) {
+                if (vote.isPresent()) {
                 votes.add(vote.get());
             }
         }
-        //scores.put(users.get(0).getName(), users.size());
-        // scores.put("Кафе Эстерхази", 1);
+
          votes.forEach(vote -> scores.put
                (vote.getCafe().getName(),
-                       scores.get(vote.getCafe().getName()) + /*[и так тоже 0]*/  1));
+                       scores.get(vote.getCafe().getName()) + 1));
 
-        return scores;
-
-//        return scores.entrySet().stream()
-//            .sorted(Comparator.comparingInt(Map.Entry::getValue))
-//            .collect(Collectors.toList());
+      return  scores;
     }
 }
