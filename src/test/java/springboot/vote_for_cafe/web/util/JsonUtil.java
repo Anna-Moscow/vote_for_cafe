@@ -1,19 +1,19 @@
-package springboot.vote_for_cafe.util;
+package springboot.vote_for_cafe.web.util;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectReader;
 
-
 import java.io.IOException;
 import java.util.List;
-import java.util.Map;
 
 
-public class JsonUtil {
+public final class JsonUtil {
 
     private static ObjectMapper mapper;
+
+    private JsonUtil() {
+    }
 
     public static void setMapper(ObjectMapper mapper) {
         JsonUtil.mapper = mapper;
@@ -44,16 +44,4 @@ public class JsonUtil {
         }
     }
 
-    public static <T> String writeAdditionProps(T obj, String addName, Object addValue) {
-        return writeAdditionProps(obj, Map.of(addName, addValue));
-    }
-
-    public static <T> String writeAdditionProps(T obj, Map<String, Object> addProps) {
-        Map<String, Object> map = mapper.convertValue(obj, new TypeReference<>() {});
-        map.putAll(addProps);
-        return writeValue(map);
-    }
-
-    public JsonUtil() {
-    }
 }

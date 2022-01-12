@@ -9,34 +9,29 @@ import springboot.vote_for_cafe.model.Dish;
 import springboot.vote_for_cafe.service.DishService;
 import springboot.vote_for_cafe.util.ValidationUtil;
 
+import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
 
 @RestController
 public class DishController {
 
-
-    private final DishService service;
-
-
+    private final DishService dishService;
 
     @Autowired
-    public DishController(DishService service)
-    {
-        this.service = service;
-        }
+    public DishController(DishService dishService) {
+        this.dishService = dishService;
+    }
 
     @GetMapping("api/cafes/{cafeId}/dishes")
-    public List<Dish> getAllDishes( @PathVariable int cafeId) {
-        return service.getAllDishes(cafeId);
-
+    public List<Dish> getAllDishes(@PathVariable int cafeId) {
+        return dishService.getAllDishes(cafeId);
     }
 
     @PostMapping(value = "api/admin/cafes/{cafeId}/dishes")
-    public ResponseEntity<Dish> create (@PathVariable int cafeId, @RequestBody Dish dish) {
-
+    public ResponseEntity<Dish> create(@PathVariable int cafeId, @Valid @RequestBody Dish dish) {
         ValidationUtil.checkNew(dish);
-         Dish created = service.save(cafeId, dish);
+        Dish created = dishService.save(cafeId, dish);
         URI uri = ServletUriComponentsBuilder.fromCurrentContextPath()
                 .path("/dishes" + "/{id}")
                 .buildAndExpand(created.getId()).toUri();
@@ -44,10 +39,10 @@ public class DishController {
         return ResponseEntity.created(uri).body(created);
     }
 
-    @DeleteMapping("api/admin/dishes/{id}") // по правилам REST api/admin/cafes/{cafeId}/dishes/{id}
-    @ResponseStatus(HttpStatus.NO_CONTENT)  //можно ли сделать свой delete c cafeId в репозитории?
-    public void delete(@PathVariable int id) {
-        service.delete(id);
+    @DeleteMapping("api/admin/cafes/{cafeId}/dishes/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void delete(@PathVariable int id, @PathVariable int cafeId) {
+        dishService.delete(id, cafeId);
     }
-    // сделать как delete meal, с проверкой и кафе id вместо user id
+
 }

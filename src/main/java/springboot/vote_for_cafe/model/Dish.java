@@ -1,22 +1,18 @@
 package springboot.vote_for_cafe.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
-import org.hibernate.validator.constraints.Range;
 import org.springframework.util.Assert;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.io.Serializable;
-import java.time.LocalDateTime;
+
 
 @Entity
-@Table(name = "dishes")
-public class Dish implements Serializable {
+@Table(name = "dishes", uniqueConstraints = {@UniqueConstraint(columnNames = {"cafe_id", "description"}, name = "dish_unique_cafe_description_idx")})
 
+public class Dish {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,19 +27,10 @@ public class Dish implements Serializable {
     @NotNull
     int price;
 
-
     @ManyToOne
-    @JoinColumn(name="cafe_id", nullable=false)
-    @JsonBackReference (value = "3")
+    @JoinColumn(name = "cafe_id", nullable = false)
+    @JsonBackReference(value = "cafeToDish")
     Cafe cafe;
-
-
-    // for tests
-    public int id() {
-        Assert.notNull(id, "Entity must have id");
-        return id;
-    }
-
 
     public String getDescription() {
         return description;
@@ -61,7 +48,9 @@ public class Dish implements Serializable {
         this.price = price;
     }
 
-    public Integer getId() { return id; }
+    public Integer getId() {
+        return id;
+    }
 
     public Dish() {
     }

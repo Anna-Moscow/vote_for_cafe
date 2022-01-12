@@ -1,4 +1,4 @@
-package springboot.vote_for_cafe;
+package springboot.vote_for_cafe.web;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,20 +12,16 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.GetMapping;
 import springboot.vote_for_cafe.model.Cafe;
-import springboot.vote_for_cafe.model.Dish;
 import springboot.vote_for_cafe.repositiry.CafeRepository;
-import springboot.vote_for_cafe.repositiry.DishRepository;
 import springboot.vote_for_cafe.util.CafeUtil;
-import springboot.vote_for_cafe.util.JsonUtil;
-
-import java.util.Map;
+import springboot.vote_for_cafe.web.util.JsonUtil;
+import springboot.vote_for_cafe.web.util.TestData;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static springboot.vote_for_cafe.TestData.*;
+import static springboot.vote_for_cafe.web.util.TestData.*;
 
 @SpringBootTest
 @Transactional
@@ -37,29 +33,22 @@ public class CafeControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
+    @Autowired
+    private CafeRepository cafeRepository;
+
     protected ResultActions perform(MockHttpServletRequestBuilder builder) throws Exception {
         return mockMvc.perform(builder);
     }
 
-
-    @Autowired
-    private CafeRepository cafeRepository;
-
     @Test
     @WithUserDetails(value = TestData.USER_MAIL)
     public void getAll() throws Exception {
-
         perform(MockMvcRequestBuilders.get("/api/cafes"))
                 .andExpect(status().isOk())
                 .andDo(print())
-                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON)) //postman - там подробнее
-              // .andExpect(content().string(JsonUtil.writeValue(dishes))); // лайфхак
-
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(CAFE_TO_MATCHER.contentJson(CafeUtil.getTos(cafes, votes)));
-
     }
-
-
 
     @Test
     @WithUserDetails(value = TestData.ADMIN_MAIL)
@@ -70,10 +59,10 @@ public class CafeControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JsonUtil.writeValue(newCafe)));
 
-        Cafe created = CAFE_IGNORE_MATCHER.readFromJson(action);
-        int newId = created.id();
+        Cafe created = CAFE_MATCHER.readFromJson(action);
+        int newId = TestData.getCafeId(created);
         newCafe.setId(newId);
-        CAFE_IGNORE_MATCHER.assertMatch(created, newCafe);
-        CAFE_IGNORE_MATCHER.assertMatch(cafeRepository.getById(newId), newCafe);
+        CAFE_MATCHER.assertMatch(created, newCafe);
+        CAFE_MATCHER.assertMatch(cafeRepository.getById(newId), newCafe);
     }
 }

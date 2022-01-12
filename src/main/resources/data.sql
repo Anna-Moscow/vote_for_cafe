@@ -21,11 +21,11 @@ VALUES ('USER', 1),
        ('USER', 4);
 
 INSERT INTO votes(created, cafe_id, user_id)
-VALUES (DATE_TRUNC('DAY', now()) + INTERVAL '10' hour, 1, 1), /*голос за 1 */
-       (DATE_TRUNC('DAY', now()) + INTERVAL '10' hour, 1, 2), /*админ. нет голоса*/
-       (DATE_TRUNC('DAY', now()) + INTERVAL '12' hour, 2, 3), /* поздно. нет голоса  !не работает, этот голос появляяется*/
-       (DATE_TRUNC('DAY', now()) + INTERVAL '1' hour, 2, 4), /*пользователь передумал !не работает, появляется этот вместо следующего*/
-       (DATE_TRUNC('DAY', now()) + INTERVAL '2' hour, 1, 4); /* голос за 1 * !не работает, см выше*/
+VALUES (DATE_TRUNC('DAY', now()) + INTERVAL '10' hour, 1, 1),
+       (DATE_TRUNC('DAY', now()) + INTERVAL '10' hour, 1, 2),
+       (DATE_TRUNC('DAY', now()) + INTERVAL '12' hour, 2, 3),
+       (DATE_TRUNC('DAY', now()) + INTERVAL '1' hour, 2, 4),
+       (DATE_TRUNC('DAY', now()) + INTERVAL '2' hour, 1, 4);
 
 
 

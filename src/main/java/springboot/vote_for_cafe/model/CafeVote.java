@@ -19,23 +19,17 @@ public class CafeVote {
     @NotNull
     private LocalDateTime created;
 
-    @ManyToOne // не 1 к 1? голосов много, а засчитываетс только последний
-    @JoinColumn(name="user_id", nullable=false)
-    @JsonBackReference (value = "1")
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    @JsonBackReference(value = "1")
     private User user;
 
-    @ManyToOne // не 1 к 1? объединятся ли голоса от разных юзеров в коллекцию?
-    @JoinColumn(name="cafe_id", nullable=false)
-    @JsonBackReference (value = "2")
+    @ManyToOne
+    @JoinColumn(name = "cafe_id", nullable = false)
+    @JsonBackReference(value = "cafeToCafeVote")
     private Cafe cafe;
 
-    public CafeVote(User user, Cafe cafe, LocalDateTime created) {
-        this.created = created;
-        this.user = user;
-        this.cafe = cafe;
-    }
-
-    public CafeVote(Integer id,  LocalDateTime created) {
+    public CafeVote(Integer id, LocalDateTime created) {
         this.id = id;
         this.created = created;
     }
@@ -79,4 +73,5 @@ public class CafeVote {
     public String toString() {
         return "{CafeVote: id - " + id + ", user - " + user + ", cafe: " + cafe + "}";
     }
+
 }

@@ -13,26 +13,20 @@ import springboot.vote_for_cafe.error.AppException;
 import java.util.Map;
 
 @RestControllerAdvice
+public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
-
-// он нигде не используется, это нормально?
-    public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
-        private final ErrorAttributes errorAttributes;
+    private final ErrorAttributes errorAttributes;
 
     public GlobalExceptionHandler(ErrorAttributes errorAttributes) {
         this.errorAttributes = errorAttributes;
     }
 
     @ExceptionHandler(AppException.class)
-        public ResponseEntity<?> appException(WebRequest request, AppException ex) {
+    public ResponseEntity<?> appException(WebRequest request, AppException ex) {
+        return createResponseEntity(request, ex.getOptions(), null, ex.getStatus());
+    }
 
-            return createResponseEntity(request, ex.getOptions(), null, ex.getStatus());
-        }
-
-// посмотреть видео про этот метод и обработку ошибок из topjava
-    // нужны еще какие-то виды исключений? мб notfound?
-    // тесты на исключения и security
-@SuppressWarnings("unchecked")
+    @SuppressWarnings("unchecked")
     private <T> ResponseEntity<T> createResponseEntity(WebRequest request, ErrorAttributeOptions options, String msg, HttpStatus status) {
         Map<String, Object> body = errorAttributes.getErrorAttributes(request, options);
         if (msg != null) {
@@ -42,4 +36,5 @@ import java.util.Map;
         body.put("error", status.getReasonPhrase());
         return (ResponseEntity<T>) ResponseEntity.status(status).body(body);
     }
+
 }

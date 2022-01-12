@@ -3,10 +3,8 @@ package springboot.vote_for_cafe.model;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.util.CollectionUtils;
-import springboot.vote_for_cafe.model.Role;
 
 import javax.persistence.*;
-import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
@@ -16,9 +14,8 @@ import java.util.List;
 import java.util.Set;
 
 @Entity
-@Table (name ="users")
+@Table(name = "users")
 public class User implements Serializable {
-
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -35,7 +32,6 @@ public class User implements Serializable {
     public String surname;
 
     @Column(name = "email", nullable = false, unique = true)
-
     @NotBlank
     @Size(max = 100)
     private String email;
@@ -54,8 +50,8 @@ public class User implements Serializable {
     @JoinColumn(name = "user_id")
     public Set<Role> roles;
 
-    @OneToMany(mappedBy="user")
-    @JsonManagedReference (value = "1")
+    @OneToMany(mappedBy = "user")
+    @JsonManagedReference(value = "1")
     private List<CafeVote> votes;
 
     public String getName() {
@@ -78,7 +74,6 @@ public class User implements Serializable {
         return roles;
     }
 
-    //public void setRoles(Set<Role> roles) {this.roles = roles;}
 
     public void setId(Integer id) {
         this.id = id;
@@ -113,16 +108,6 @@ public class User implements Serializable {
         setRoles(roles);
     }
 
-    // нормален ли такой конструктор с EnumSet?
-    public User(Integer id,  String name, String surname,  String email, String password, Role role, Role... roles) {
-        this.id = id;
-        this.name = name;
-        this.surname = surname;
-        this.email = email;
-        this.password = password;
-        EnumSet.of(role, roles);
-    }
-
     public void setRoles(Collection<Role> roles) {
         this.roles = CollectionUtils.isEmpty(roles) ? EnumSet.noneOf(Role.class) : EnumSet.copyOf(roles);
     }
@@ -130,4 +115,5 @@ public class User implements Serializable {
     public void setVotes(List<CafeVote> votes) {
         this.votes = votes;
     }
+
 }
