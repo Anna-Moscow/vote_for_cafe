@@ -1,6 +1,5 @@
 package springboot.vote_for_cafe.web;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,7 +19,6 @@ public class CafeVoteController {
 
     private final CafeVoteService cafeVoteService;
 
-    @Autowired
     public CafeVoteController(CafeVoteService cafeVoteService) {
         this.cafeVoteService = cafeVoteService;
     }

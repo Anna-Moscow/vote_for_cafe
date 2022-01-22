@@ -1,4 +1,4 @@
-package springboot.vote_for_cafe.repositiry;
+package springboot.vote_for_cafe.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

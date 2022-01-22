@@ -2,9 +2,9 @@ package springboot.vote_for_cafe.service;
 
 import org.springframework.stereotype.Service;
 import springboot.vote_for_cafe.model.CafeVote;
-import springboot.vote_for_cafe.repositiry.CafeRepository;
-import springboot.vote_for_cafe.repositiry.CafeVoteRepository;
-import springboot.vote_for_cafe.repositiry.UserRepository;
+import springboot.vote_for_cafe.repository.CafeRepository;
+import springboot.vote_for_cafe.repository.CafeVoteRepository;
+import springboot.vote_for_cafe.repository.UserRepository;
 
 import java.time.LocalDateTime;
 

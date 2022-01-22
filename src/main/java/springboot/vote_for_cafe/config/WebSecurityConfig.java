@@ -13,7 +13,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import springboot.vote_for_cafe.model.Role;
 import springboot.vote_for_cafe.model.User;
-import springboot.vote_for_cafe.repositiry.UserRepository;
+import springboot.vote_for_cafe.repository.UserRepository;
 import springboot.vote_for_cafe.web.AuthUser;
 
 import java.util.Optional;

@@ -5,9 +5,9 @@ import springboot.vote_for_cafe.model.Cafe;
 import springboot.vote_for_cafe.model.CafeVote;
 import springboot.vote_for_cafe.model.Role;
 import springboot.vote_for_cafe.model.User;
-import springboot.vote_for_cafe.repositiry.CafeRepository;
-import springboot.vote_for_cafe.repositiry.UserRepository;
-import springboot.vote_for_cafe.repositiry.CafeVoteRepository;
+import springboot.vote_for_cafe.repository.CafeRepository;
+import springboot.vote_for_cafe.repository.UserRepository;
+import springboot.vote_for_cafe.repository.CafeVoteRepository;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;

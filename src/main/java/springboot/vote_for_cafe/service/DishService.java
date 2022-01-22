@@ -3,8 +3,8 @@ package springboot.vote_for_cafe.service;
 
 import org.springframework.stereotype.Service;
 import springboot.vote_for_cafe.model.Dish;
-import springboot.vote_for_cafe.repositiry.CafeRepository;
-import springboot.vote_for_cafe.repositiry.DishRepository;
+import springboot.vote_for_cafe.repository.CafeRepository;
+import springboot.vote_for_cafe.repository.DishRepository;
 
 import java.util.List;
 

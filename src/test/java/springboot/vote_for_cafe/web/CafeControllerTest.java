@@ -13,7 +13,7 @@ import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilde
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.transaction.annotation.Transactional;
 import springboot.vote_for_cafe.model.Cafe;
-import springboot.vote_for_cafe.repositiry.CafeRepository;
+import springboot.vote_for_cafe.repository.CafeRepository;
 import springboot.vote_for_cafe.util.CafeUtil;
 import springboot.vote_for_cafe.web.util.JsonUtil;
 import springboot.vote_for_cafe.web.util.TestData;
